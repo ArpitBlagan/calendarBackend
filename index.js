@@ -54,6 +54,7 @@ app.get('/google/auth',async(req,res)=>{
 });
 app.get('/info',async(req,res)=>{
     const token=req.cookies.token;
+    console.log(token);
     if(!token||token!=storedAccessToken){
         return  res.send({msg:"Login Required"})
     }
@@ -108,6 +109,7 @@ app.get('/logout',async(req,res)=>{
 });
 app.get('/events',async(req,res)=>{
     const token=req.cookies.token;
+    console.log(token);
     if(!token||token!=storedAccessToken){
         return  res.send({msg:"Login Required"})
     }
