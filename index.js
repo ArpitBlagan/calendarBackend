@@ -39,8 +39,6 @@ app.get('/google/auth',async(req,res)=>{
     const {tokens}=await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
     storedAccessToken=tokens.access_token;
-    if(tokens.refresh_token){storedRefreshToken = tokens.refresh_token;}
-    console.log(tokens);
      res.redirect('http://localhost:5173/main');
 });
 app.get('/info',async(req,res)=>{
@@ -49,8 +47,6 @@ app.get('/info',async(req,res)=>{
     oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
     // Refresh the access token.
     const { tokens } = await oauth2Client.refreshAccessToken();
-    storedAccessToken=tokens.access_token;
-    if(tokens.refresh_token){storedRefreshToken = tokens.refresh_token;}
     // Set the new access token on the OAuth2 client.
     oauth2Client.setCredentials(tokens);
     const people = google.people({ version: 'v1', auth: oauth2Client });
