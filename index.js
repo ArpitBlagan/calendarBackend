@@ -48,6 +48,7 @@ app.get('/info',async(req,res)=>{
     // Refresh the access token.
     const { tokens } = await oauth2Client.refreshAccessToken();
     // Set the new access token on the OAuth2 client.
+    console.log(tokens);
     oauth2Client.setCredentials(tokens);
     const people = google.people({ version: 'v1', auth: oauth2Client });
     const data=await people.people.get({
