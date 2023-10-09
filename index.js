@@ -72,7 +72,7 @@ app.get('/info',async(req,res)=>{
     }
 });
 app.get('/logout',async(req,res)=>{
-    oauth2Client.revokeToken(storedAccessToken, (err, response) => {
+    oauth2Client.revokeToken( (err, response) => {
         if (err) {
           console.error('Error revoking access token:', err);
         } else {
