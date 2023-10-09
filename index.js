@@ -37,7 +37,7 @@ app.get('/google/auth',async(req,res)=>{
     const code=req.query.code;
     const {tokens}=await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-    storedRefreshToken = tokens.refresh_token;
+    if(tokens.refresh_token){storedRefreshToken = tokens.refresh_token;}
     console.log(tokens);
      res.redirect('http://localhost:5173/main');
 });
