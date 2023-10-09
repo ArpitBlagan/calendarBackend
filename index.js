@@ -38,11 +38,14 @@ app.get('/google/auth',async(req,res)=>{
     const code=req.query.code;
     const {tokens}=await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
+    console.log(tokens);
     storedAccessToken=tokens.access_token;
+    if(tokens.refresh_token){
+        storedRefreshToken=tokens.refresh_token
      res.redirect('http://localhost:5173/main');
 });
 app.get('/info',async(req,res)=>{
-    if (storedRefreshToken=='') {return  res.send({msg:"Login Required"})}
+    if (storedRefreshToken=='') {console.log("Error here");return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
     oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
     // Refresh the access token.
