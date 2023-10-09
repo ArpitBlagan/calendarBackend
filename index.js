@@ -25,7 +25,7 @@ const oauth2Client=new google.auth.OAuth2(
 const scopes = [
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/calendar'
+    'https://www.googleapis.com/auth/calendar.readonly'
 ];
 app.get('/login',(req,res)=>{
     const url=oauth2Client.generateAuthUrl({
