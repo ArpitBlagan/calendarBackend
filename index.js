@@ -44,7 +44,7 @@ app.get('/google/auth',async(req,res)=>{
     storedAccessToken=tokens.access_token;
     if(tokens.refresh_token){
         storedRefreshToken=tokens.refresh_token}
-    res.cookie(token,storedAccessToken,{
+    res.cookie('token',storedAccessToken,{
          httpOnly:true,
             expires:new  Date(Date.now()+(30*24*60*60*1000)),
             sameSite: 'none',
