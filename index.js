@@ -5,7 +5,7 @@ const {google}=require('googleapis');
 require('dotenv').config();
 const app=express();
 app.use(cors({
-    origin:['http://localhost:5173','https://65241bd9bcc36f1060ccd1f5--cerulean-mandazi-1d3f45.netlify.app'],
+    origin:['http://localhost:5173','https://65242e13da108e00a0677408--lighthearted-kheer-5a0511.netlify.app'],
     credentials:true
 }));
 app.use(cookieParser());
@@ -50,12 +50,12 @@ app.get('/google/auth',async(req,res)=>{
             sameSite: 'none',
             secure:true
     })
-     res.redirect('https://65241bd9bcc36f1060ccd1f5--cerulean-mandazi-1d3f45.netlify.app/main');
+     res.redirect('https://65242e13da108e00a0677408--lighthearted-kheer-5a0511.netlify.app/main');
 });
 app.get('/info',async(req,res)=>{
     const token=req.cookies.token;
     console.log(token);
-    if(!token||token!=storedAccessToken){
+    if(!token||token==''||token!=storedAccessToken){
         return  res.send({msg:"Login Required"})
     }
     if (storedRefreshToken=='') {console.log("Error here");return  res.send({msg:"Login Required"})}
@@ -105,12 +105,17 @@ app.get('/logout',async(req,res)=>{
           }
         });
       }
+    res.cookie("token",'',{
+        httpOnly:true,
+        sameSite: 'none',
+        secure: true, 
+    });
       res.send({msg:"done"});
 });
 app.get('/events',async(req,res)=>{
     const token=req.cookies.token;
     console.log(token);
-    if(!token||token!=storedAccessToken){
+    if(!token||token==''||token!=storedAccessToken){
         return  res.send({msg:"Login Required"})
     }
     if (storedRefreshToken=='') {return  res.send({msg:"Login Required"})}
