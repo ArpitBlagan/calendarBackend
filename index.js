@@ -51,7 +51,7 @@ app.get('/info',async(req,res)=>{
     // Refresh the access token.
     const { credentials } = await oauth2Client.refreshAccessToken();
     // Set the new access token on the OAuth2 client.
-    console.log(credentials);
+    console.log("cred:  ",credentials);
     oauth2Client.setCredentials(credentials);
     const people = google.people({ version: 'v1', auth: oauth2Client });
     const data=await people.people.get({
@@ -100,7 +100,7 @@ app.get('/events',async(req,res)=>{
     oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
     // Refresh the access token.
     const { credentials } = await oauth2Client.refreshAccessToken();
-    console.log(credentials);
+    console.log("cred:  ",credentials);
     // Set the new access token on the OAuth2 client.
     oauth2Client.setCredentials(credentials);
     const data=await  calendar.events.list({
