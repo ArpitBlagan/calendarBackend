@@ -46,10 +46,10 @@ app.get('/info',async(req,res)=>{
     // Set the stored refresh token on the OAuth2 client.
     oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
     // Refresh the access token.
-    const { tokens } = await oauth2Client.refreshAccessToken();
+    const { credentials } = await oauth2Client.refreshAccessToken();
     // Set the new access token on the OAuth2 client.
-    console.log(tokens);
-    oauth2Client.setCredentials(tokens);
+    console.log(credentials);
+    oauth2Client.setCredentials(credentials);
     const people = google.people({ version: 'v1', auth: oauth2Client });
     const data=await people.people.get({
         resourceName: 'people/me',
@@ -70,37 +70,36 @@ app.get('/info',async(req,res)=>{
         return res.status(200).json({name,email,img});
     }
 });
-app.get('/logout',async(req,res)=>{
-    oauth2Client.revokeToken( storedAccessToken,(err, response) => {
-        if (err) {
-          console.error('Error revoking access token:', err);
-        } else {
-          console.log('Access token revoked successfully');
-        }
-      });
+// app.get('/logout',async(req,res)=>{
+//     oauth2Client.revokeToken( storedAccessToken,(err, response) => {
+//         if (err) {
+//           console.error('Error revoking access token:', err);
+//         } else {
+//           console.log('Access token revoked successfully');
+//         }
+//       });
       
-      // Revoke the refresh token (if supported by the OAuth2 provider)
-      if (storedRefreshToken) {
-        oauth2Client.revokeToken(storedRefreshToken, (err, response) => {
-          if (err) {
-            console.error('Error revoking refresh token:', err);
-          } else {
-            console.log('Refresh token revoked successfully');
-          }
-        });
-      }
-      res.send({msg:"done"});
-});
+//       // Revoke the refresh token (if supported by the OAuth2 provider)
+//       if (storedRefreshToken) {
+//         oauth2Client.revokeToken(storedRefreshToken, (err, response) => {
+//           if (err) {
+//             console.error('Error revoking refresh token:', err);
+//           } else {
+//             console.log('Refresh token revoked successfully');
+//           }
+//         });
+//       }
+//       res.send({msg:"done"});
+// });
 app.get('/events',async(req,res)=>{
     if (storedRefreshToken=='') {return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
     oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
     // Refresh the access token.
-    const { tokens } = await oauth2Client.refreshAccessToken();
-    storedAccessToken=tokens.access_token;
-    if(tokens.refresh_token){storedRefreshToken = tokens.refresh_token;}
+    const { credentials } = await oauth2Client.refreshAccessToken();
+    console.log(credentials);
     // Set the new access token on the OAuth2 client.
-    oauth2Client.setCredentials(tokens);
+    oauth2Client.setCredentials(credentials);
     const data=await  calendar.events.list({
         calendarId: "primary",
         auth:oauth2Client
