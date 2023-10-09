@@ -1,5 +1,6 @@
 const express=require('express');
 const cors=require('cors');
+const cookieParser=require('cookie-parser');
 const {google}=require('googleapis');
 require('dotenv').config();
 const app=express();
@@ -7,6 +8,7 @@ app.use(cors({
     origin:['http://localhost:5173','https://65241bd9bcc36f1060ccd1f5--cerulean-mandazi-1d3f45.netlify.app'],
     credentials:true
 }));
+app.use(cookieParser());
 let storedRefreshToken = '';
 let storedAccessToken='';
 const calendar=google.calendar({
