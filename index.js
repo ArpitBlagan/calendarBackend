@@ -53,6 +53,10 @@ app.get('/google/auth',async(req,res)=>{
      res.redirect('https://65241bd9bcc36f1060ccd1f5--cerulean-mandazi-1d3f45.netlify.app/main');
 });
 app.get('/info',async(req,res)=>{
+    const token=req.cookies.token;
+    if(!token||token!=storedAccessToken){
+        return  res.send({msg:"Login Required"})
+    }
     if (storedRefreshToken=='') {console.log("Error here");return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
     oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
@@ -103,6 +107,10 @@ app.get('/logout',async(req,res)=>{
       res.send({msg:"done"});
 });
 app.get('/events',async(req,res)=>{
+    const token=req.cookies.token;
+    if(!token||token!=storedAccessToken){
+        return  res.send({msg:"Login Required"})
+    }
     if (storedRefreshToken=='') {return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
     oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
