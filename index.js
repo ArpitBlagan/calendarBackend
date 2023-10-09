@@ -4,7 +4,7 @@ const {google}=require('googleapis');
 require('dotenv').config();
 const app=express();
 app.use(cors({
-    origin:['http://localhost:5173','https://652404c0404bc2145cc012ef--venerable-syrniki-f965c6.netlify.app'],
+    origin:['http://localhost:5173','https://65241bd9bcc36f1060ccd1f5--cerulean-mandazi-1d3f45.netlify.app'],
     credentials:true
 }));
 let storedRefreshToken = '';
@@ -42,7 +42,7 @@ app.get('/google/auth',async(req,res)=>{
     storedAccessToken=tokens.access_token;
     if(tokens.refresh_token){
         storedRefreshToken=tokens.refresh_token}
-     res.redirect('https://652404c0404bc2145cc012ef--venerable-syrniki-f965c6.netlify.app/main');
+     res.redirect('https://65241bd9bcc36f1060ccd1f5--cerulean-mandazi-1d3f45.netlify.app/main');
 });
 app.get('/info',async(req,res)=>{
     if (storedRefreshToken=='') {console.log("Error here");return  res.send({msg:"Login Required"})}
