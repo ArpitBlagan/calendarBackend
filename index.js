@@ -44,6 +44,12 @@ app.get('/google/auth',async(req,res)=>{
     storedAccessToken=tokens.access_token;
     if(tokens.refresh_token){
         storedRefreshToken=tokens.refresh_token}
+    res.cookie(token,storedAccessToken,{
+         httpOnly:true,
+            expires:new  Date(Date.now()+(30*24*60*60*1000)),
+            sameSite: 'none',
+            secure:true
+    })
      res.redirect('https://65241bd9bcc36f1060ccd1f5--cerulean-mandazi-1d3f45.netlify.app/main');
 });
 app.get('/info',async(req,res)=>{
