@@ -8,6 +8,7 @@ app.use(cors({
     credentials:true
 }));
 let storedRefreshToken = '';
+let storedAccessToken='';
 const calendar=google.calendar({
     version:"v3",
     auth:process.env.KEY
@@ -37,6 +38,7 @@ app.get('/google/auth',async(req,res)=>{
     const code=req.query.code;
     const {tokens}=await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
+    storedAccessToken=tokens.access_token;
     if(tokens.refresh_token){storedRefreshToken = tokens.refresh_token;}
     console.log(tokens);
      res.redirect('http://localhost:5173/main');
@@ -68,7 +70,28 @@ app.get('/info',async(req,res)=>{
         const img=profile.photos[0].url
         return res.status(200).json({name,email,img});
     }
-})
+});
+app.get('/logout',async(req,res)=>{
+    oauth2Client.revokeToken(storedAccessToken, (err, response) => {
+        if (err) {
+          console.error('Error revoking access token:', err);
+        } else {
+          console.log('Access token revoked successfully');
+        }
+      });
+      
+      // Revoke the refresh token (if supported by the OAuth2 provider)
+      if (storedRefreshToken) {
+        oauth2Client.revokeToken(storedRefreshToken, (err, response) => {
+          if (err) {
+            console.error('Error revoking refresh token:', err);
+          } else {
+            console.log('Refresh token revoked successfully');
+          }
+        });
+      }
+      res.send({msg:"done"});
+});
 app.get('/events',async(req,res)=>{
     if (storedRefreshToken=='') {return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
