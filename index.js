@@ -41,7 +41,7 @@ app.get('/google/auth',async(req,res)=>{
     console.log(tokens);
     storedAccessToken=tokens.access_token;
     if(tokens.refresh_token){
-        storedRefreshToken=tokens.refresh_token
+        storedRefreshToken=tokens.refresh_token}
      res.redirect('http://localhost:5173/main');
 });
 app.get('/info',async(req,res)=>{
