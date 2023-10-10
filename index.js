@@ -75,7 +75,7 @@ app.get('/info',async(req,res)=>{
       const val=await tDB.find({access_token:token});
       if(!val){
         return  res.send({msg:"Login Required"})
-      }else{console.log(val));
+      }else{console.log(val)};
       storedAccessToken=val.access_token;
       storedRefreshToken=val.refresh_token;
     if (storedRefreshToken=='') {console.log("Error here");return  res.send({msg:"Login Required"})}
