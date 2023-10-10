@@ -14,7 +14,7 @@ app.use(cors({
     credentials:true
 }));
 app.use(cookieParser());
-const tDB= require('./model/tokenSchema');
+const tDB= require('./tokenSchema');
 const calendar=google.calendar({
     version:"v3",
     auth:process.env.KEY
