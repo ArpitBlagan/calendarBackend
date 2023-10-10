@@ -79,12 +79,16 @@ app.get('/info',async(req,res)=>{
     }
     if (storedRefreshToken=='') {console.log("Error here");return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
+    try{
     oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
     // Refresh the access token.
     const { credentials } = await oauth2Client.refreshAccessToken();
     // Set the new access token on the OAuth2 client.
     console.log("cred:  ",credentials);
-    oauth2Client.setCredentials(credentials);
+    oauth2Client.setCredentials(credentials);}
+    catch(err){
+      console.log(err);
+    }
     const people = google.people({ version: 'v1', auth: oauth2Client });
     const data=await people.people.get({
         resourceName: 'people/me',
@@ -153,12 +157,16 @@ app.get('/events',async(req,res)=>{
     }
     if (storedRefreshToken=='') {return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
+    try{
     oauth2Client.setCredentials({ refresh_token: storedRefreshToken });
     // Refresh the access token.
     const { credentials } = await oauth2Client.refreshAccessToken();
     console.log("cred:  ",credentials);
     // Set the new access token on the OAuth2 client.
-    oauth2Client.setCredentials(credentials);
+    oauth2Client.setCredentials(credentials);}
+    catch(err){
+        console.log('cal',err);
+    }
     const data=await  calendar.events.list({
         calendarId: "primary",
         auth:oauth2Client
