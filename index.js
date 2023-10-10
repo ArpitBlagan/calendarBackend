@@ -3,14 +3,18 @@ const cors=require('cors');
 const cookieParser=require('cookie-parser');
 const {google}=require('googleapis');
 require('dotenv').config();
+const mongoose=require('mongoose');
+mongoose.connect("mongodb+srv://Arpit:Ab123@cluster0.j4fl22k.mongodb.net/assignment",{
+  useNewUrlParser: true,
+useUnifiedTopology: true,
+}).then(con=>{console.log("connnected")});
 const app=express();
 app.use(cors({
     origin:['http://localhost:5173','https://65242e13da108e00a0677408--lighthearted-kheer-5a0511.netlify.app'],
     credentials:true
 }));
 app.use(cookieParser());
-let storedRefreshToken = '';
-let storedAccessToken='';
+const tDB= require('./model/tokenSchema');
 const calendar=google.calendar({
     version:"v3",
     auth:process.env.KEY
@@ -41,22 +45,38 @@ app.get('/google/auth',async(req,res)=>{
     const {tokens}=await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
     console.log(tokens);
-    storedAccessToken=tokens.access_token;
+    const storedAccessToken=tokens.access_token;
+    const storedRefreshToken='';
     if(tokens.refresh_token){
-        storedRefreshToken=tokens.refresh_token}
+        storedRefreshToken=tokens.refresh_token;
+        const val=await tDB.create({
+            access_token:storedAccessToken,
+            refresh_token:storedRefreshToken
+        });console.log(val);
+    }
     res.cookie('token',storedAccessToken,{
-         httpOnly:true,
-            expires:new  Date(Date.now()+(30*24*60*60*1000)),
-            sameSite: 'none',
-            secure:true
-    })
+      httpOnly:true,
+         expires:new  Date(Date.now()+(30*24*60*60*1000)),
+         sameSite: 'none',
+         secure:true
+ }) 
      res.redirect('https://65242e13da108e00a0677408--lighthearted-kheer-5a0511.netlify.app/main');
 });
 app.get('/info',async(req,res)=>{
     const token=req.cookies.token;
     console.log(token);
-    if(!token||token==''||token!=storedAccessToken){
+    if(!token||token==''){
         return  res.send({msg:"Login Required"})
+    }
+    let storedAccessToken='';
+    let storedRefreshToken='';
+    if(token){
+      const val=await tDB.find({access_token:token});
+      if(!val){
+        return  res.send({msg:"Login Required"})
+      }
+      storedAccessToken=val.access_token;
+      storedRefreshToken=val.refresh_token;
     }
     if (storedRefreshToken=='') {console.log("Error here");return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
@@ -71,7 +91,7 @@ app.get('/info',async(req,res)=>{
         resourceName: 'people/me',
         personFields: 'names,emailAddresses,photos'
       }).catch((err)=>{
-        console.log(err);
+        console.log("info: ",err);
        return  res.send({msg:"Login Required"})
     })
     if(data){
@@ -87,6 +107,10 @@ app.get('/info',async(req,res)=>{
     }return  res.send({msg:"Login Required"})
 });
 app.get('/logout',async(req,res)=>{
+    const token=req.cookies.token;
+    console.log(token);
+    const ff=await tDB.deleteOne({access_token:token});
+    console.log("logout",ff);
     oauth2Client.revokeToken( storedAccessToken,(err, response) => {
         if (err) {
           console.error('Error revoking access token:', err);
@@ -114,9 +138,19 @@ app.get('/logout',async(req,res)=>{
 });
 app.get('/events',async(req,res)=>{
     const token=req.cookies.token;
-    console.log(token);
-    if(!token||token==''||token!=storedAccessToken){
+    console.log("cal",token)
+    if(!token||token==''){
+      return  res.send({msg:"Login Required"})
+    }
+    let storedAccessToken='';
+    let storedRefreshToken='';
+    if(token){
+      const val=await tDB.find({access_token:token});
+      if(!val){
         return  res.send({msg:"Login Required"})
+      }
+      storedAccessToken=val.access_token;
+      storedRefreshToken=val.refresh_token;
     }
     if (storedRefreshToken=='') {return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
@@ -130,7 +164,7 @@ app.get('/events',async(req,res)=>{
         calendarId: "primary",
         auth:oauth2Client
       }).catch((err)=>{
-        //console.log(err);
+        console.log("cal",err);
        return  res.send({msg:"Login Required"})
     })
     if(data){
