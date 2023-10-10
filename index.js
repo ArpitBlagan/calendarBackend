@@ -113,6 +113,9 @@ app.get('/info',async(req,res)=>{
 });
 app.get('/logout',async(req,res)=>{
     const token=req.cookies.token;
+  if(!token||token==''){
+        return  res.redirect("https://65242e13da108e00a0677408--lighthearted-kheer-5a0511.netlify.app");
+    }
     console.log(token);
     const val=await tDB.find({access_token:token});
     const storedAccessToken=val[0].access_token;
