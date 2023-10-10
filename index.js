@@ -46,9 +46,8 @@ app.get('/google/auth',async(req,res)=>{
     oauth2Client.setCredentials(tokens);
     console.log(tokens);
     const storedAccessToken=tokens.access_token;
-    const storedRefreshToken='';
     if(tokens.refresh_token){
-        storedRefreshToken=tokens.refresh_token;
+        const storedRefreshToken=tokens.refresh_token;
         const val=await tDB.create({
             access_token:storedAccessToken,
             refresh_token:storedRefreshToken
