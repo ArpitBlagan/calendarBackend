@@ -118,6 +118,9 @@ app.get('/logout',async(req,res)=>{
     }
     console.log(token);
     const val=await tDB.find({access_token:token});
+    if(val.length==0||!val){
+      return res.send({msg:'Login Required'})
+    }
     const storedAccessToken=val[0].access_token;
     const storedRefreshToken=val[0].refresh_token;
     const ff=await tDB.deleteOne({access_token:token});
