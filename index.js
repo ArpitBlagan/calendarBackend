@@ -51,7 +51,9 @@ app.get('/google/auth',async(req,res)=>{
         const val=await tDB.create({
             access_token:storedAccessToken,
             refresh_token:storedRefreshToken
-        });console.log(val);
+        });
+      if(!val){console.log("somethink went wrong");}
+      console.log(val);
     }
     res.cookie('token',storedAccessToken,{
       httpOnly:true,
