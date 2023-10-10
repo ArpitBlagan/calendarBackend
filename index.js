@@ -75,10 +75,9 @@ app.get('/info',async(req,res)=>{
       const val=await tDB.find({access_token:token});
       if(!val){
         return  res.send({msg:"Login Required"})
-      }
+      }else{console.log(val));
       storedAccessToken=val.access_token;
       storedRefreshToken=val.refresh_token;
-    }
     if (storedRefreshToken=='') {console.log("Error here");return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
     try{
@@ -109,7 +108,8 @@ app.get('/info',async(req,res)=>{
         const email=profile.emailAddresses[0].value;
         const img=profile.photos[0].url
         return res.status(200).json({name,email,img});
-    }return  res.send({msg:"Login Required"})
+    }}
+      return  res.send({msg:"Login Required"})
 });
 app.get('/logout',async(req,res)=>{
     const token=req.cookies.token;
