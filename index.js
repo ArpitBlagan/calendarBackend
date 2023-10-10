@@ -117,7 +117,7 @@ app.get('/logout',async(req,res)=>{
     const val=await tDB.find({access_token:token});
     const storedAccessToken=val[0].access_token;
     const storedRefreshToken=val[0].refresh_token;
-    const ff=await tDB.DeleteOne({access_token:token});
+    const ff=await tDB.deleteOne({access_token:token});
     console.log("logout",ff);
     oauth2Client.revokeToken( storedAccessToken,(err, response) => {
         if (err) {
