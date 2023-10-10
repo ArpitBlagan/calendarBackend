@@ -10,7 +10,7 @@ useUnifiedTopology: true,
 }).then(con=>{console.log("connnected")});
 const app=express();
 app.use(cors({
-    origin:['http://localhost:5173','https://65242e13da108e00a0677408--lighthearted-kheer-5a0511.netlify.app'],
+    origin:['http://localhost:5173','https://65253184a345e30aa644ebc5--silver-moonbeam-2fe27c.netlify.app'],
     credentials:true
 }));
 app.use(cookieParser());
@@ -61,7 +61,7 @@ app.get('/google/auth',async(req,res)=>{
          sameSite: 'none',
          secure:true
  }) 
-     res.redirect('https://65242e13da108e00a0677408--lighthearted-kheer-5a0511.netlify.app/main');
+     res.redirect('https://65253184a345e30aa644ebc5--silver-moonbeam-2fe27c.netlify.app/main');
 });
 app.get('/info',async(req,res)=>{
     const token=req.cookies.token;
@@ -115,7 +115,7 @@ app.get('/logout',async(req,res)=>{
   console.log("req is made on this logout route");
     const token=req.cookies.token;
   if(!token||token==''){
-        return  res.redirect("https://65242e13da108e00a0677408--lighthearted-kheer-5a0511.netlify.app");
+        return  res.redirect("https://65253184a345e30aa644ebc5--silver-moonbeam-2fe27c.netlify.app");
     }
     console.log(token);
     const val=await tDB.find({access_token:token});
