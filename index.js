@@ -74,7 +74,7 @@ app.get('/info',async(req,res)=>{
         console.log(err);
        return  res.send({msg:"Login Required"})
     })
-    if(res){
+    if(data){
         const profile = data.data;
         console.log(profile);
         console.log(`Name: ${profile.names[0].displayName}`);
@@ -84,7 +84,7 @@ app.get('/info',async(req,res)=>{
         const email=profile.emailAddresses[0].value;
         const img=profile.photos[0].url
         return res.status(200).json({name,email,img});
-    }
+    }return  res.send({msg:"Login Required"})
 });
 app.get('/logout',async(req,res)=>{
     oauth2Client.revokeToken( storedAccessToken,(err, response) => {
@@ -137,7 +137,7 @@ app.get('/events',async(req,res)=>{
         const events=data?.data?.items;
         //console.log(events);
         return res.status(200).json(events);
-    }
+    }return  res.send({msg:"Login Required"})
 });
 app.listen(process.env.PORT,()=>{
     console.log(`Listening on Port ${process.env.PORT}`);
