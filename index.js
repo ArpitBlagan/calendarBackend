@@ -112,6 +112,7 @@ app.get('/info',async(req,res)=>{
       return  res.send({msg:"Login Required"})
 });
 app.get('/logout',async(req,res)=>{
+  console.log("req is made on this logout route");
     const token=req.cookies.token;
   if(!token||token==''){
         return  res.redirect("https://65242e13da108e00a0677408--lighthearted-kheer-5a0511.netlify.app");
