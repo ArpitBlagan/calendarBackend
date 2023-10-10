@@ -76,8 +76,8 @@ app.get('/info',async(req,res)=>{
       if(!val){
         return  res.send({msg:"Login Required"})
       }else{console.log(val)};
-      storedAccessToken=val.access_token;
-      storedRefreshToken=val.refresh_token;
+      storedAccessToken=val[0].access_token;
+      storedRefreshToken=val[0].refresh_token;
     if (storedRefreshToken=='') {console.log("Error here");return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
     try{
@@ -154,8 +154,8 @@ app.get('/events',async(req,res)=>{
       if(!val){
         return  res.send({msg:"Login Required"})
       }
-      storedAccessToken=val.access_token;
-      storedRefreshToken=val.refresh_token;
+      storedAccessToken=val[0].access_token;
+      storedRefreshToken=val[0].refresh_token;
     }
     if (storedRefreshToken=='') {return  res.send({msg:"Login Required"})}
     // Set the stored refresh token on the OAuth2 client.
