@@ -73,7 +73,7 @@ app.get('/info',async(req,res)=>{
     let storedRefreshToken='';
     if(token){
       const val=await tDB.find({access_token:token});
-      if(!val){
+      if(!val||val.length==0){
         return  res.send({msg:"Login Required"})
       }else{console.log(val)};
       storedAccessToken=val[0].access_token;
@@ -154,7 +154,7 @@ app.get('/events',async(req,res)=>{
     let storedRefreshToken='';
     if(token){
       const val=await tDB.find({access_token:token});
-      if(!val){
+      if(!val||val.length==0){
         return  res.send({msg:"Login Required"})
       }
       storedAccessToken=val[0].access_token;
